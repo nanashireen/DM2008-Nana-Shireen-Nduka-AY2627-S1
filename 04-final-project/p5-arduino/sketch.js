@@ -34,3 +34,11 @@ function connectBtnClicked() {
     port.close();
   }
 }
+
+function generate() {
+
+}
+
+function chooseOne() {
+  
+}
