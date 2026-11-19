@@ -1,4 +1,3 @@
-// L-System Rules
 let rules = {
   X: [
     { rule: "F[+X]FX",       prob: 0.4 },
@@ -18,18 +17,16 @@ const numGens = 3;
 let drawRules;
 let word = "X";
 
-// Optimized Flower Mesh Parameters
 let rows = 50, cols = 100; 
 let flowerPoints = [];
 
-// Polar Rose Flower Species Presets (Inspired by your 2D sketch formula)
 let flowerTypes = [
-  { name: "Classic 5-Petal", pNum: 5, fD: 160, pLen: 60,  pSharp: 0.5, fHeight: 250, curve1: 0.8, curve2: 0.2, b: 2.5, bNum: 10 },
-  { name: "Star Blossom",    pNum: 6, fD: 90,  pLen: 130, pSharp: 1.4, fHeight: 220, curve1: 0.9, curve2: 0.15, b: 1.5, bNum: 12 },
-  { name: "Ruffled Peony",   pNum: 8, fD: 180, pLen: 45,  pSharp: 0.3, fHeight: 280, curve1: 0.7, curve2: 0.25, b: 4.5, bNum: 16 },
-  { name: "Wild Trillium",   pNum: 3, fD: 110, pLen: 110, pSharp: 0.8, fHeight: 200, curve1: 1.0, curve2: 0.1, b: 2.0, bNum: 6 },
-  { name: "Lotus Cup",       pNum: 7, fD: 140, pLen: 80,  pSharp: 0.6, fHeight: 310, curve1: 0.6, curve2: 0.3, b: 3.0, bNum: 14 },
-  { name: "Dahlia Burst",    pNum: 10, fD: 130, pLen: 95, pSharp: 0.9, fHeight: 230, curve1: 0.85, curve2: 0.2, b: 2.0, bNum: 20 }
+  { name: "Classic 5-Petal", pNum: 5, fD: 160, pLen: 60,  pSharp: 0.5, fHeight: 250, curve1: 0.8, curve2: 0.2, b: 2.5, bNum: 10, hue: 345 },
+  { name: "Star Blossom",    pNum: 6, fD: 90,  pLen: 130, pSharp: 1.4, fHeight: 220, curve1: 0.9, curve2: 0.15, b: 1.5, bNum: 12, hue: 45 },
+  { name: "Ruffled Peony",   pNum: 8, fD: 180, pLen: 45,  pSharp: 0.3, fHeight: 280, curve1: 0.7, curve2: 0.25, b: 4.5, bNum: 16, hue: 315 },
+  { name: "Wild Trillium",   pNum: 3, fD: 110, pLen: 110, pSharp: 0.8, fHeight: 200, curve1: 1.0, curve2: 0.1, b: 2.0, bNum: 6,  hue: 165 },
+  { name: "Lotus Cup",       pNum: 7, fD: 140, pLen: 80,  pSharp: 0.6, fHeight: 310, curve1: 0.6, curve2: 0.3, b: 3.0, bNum: 14, hue: 20 },
+  { name: "Dahlia Burst",    pNum: 10, fD: 130, pLen: 95, pSharp: 0.9, fHeight: 230, curve1: 0.85, curve2: 0.2, b: 2.0, bNum: 20, hue: 265 }
 ];
 let currentTypeIndex = 0;
 
@@ -41,7 +38,6 @@ function setup() {
   angleMode(DEGREES);
   noSmooth();
 
-  // Generate initial flower geometry
   generateFlowerMesh(flowerTypes[currentTypeIndex]);
 
   drawRules = {
@@ -49,12 +45,11 @@ function setup() {
       drawParticleFlower();
     },
     "F": () => {
-      // Draw 3D volumetric cylinder branch
       push();
       colorMode(HSB, 360, 100, 100);
       translate(0, -len / 2, 0);
       noStroke();
-      fill(95, 45, 38); // Natural muted green stem
+      fill(95, 45, 38);
       cylinder(1.4, len);
       pop();
       
@@ -74,23 +69,20 @@ function setup() {
 }
 
 function draw() {
-  background(5); // Pure dark background
+  background(5);
   
-  // Neutral lighting
   ambientLight(120);
   directionalLight(200, 200, 200, 0.5, 0.5, -1);
 
   orbitControl(2, 2);
 
-  // Generate L-System string
   word = "X";
   for(let i = 0; i < numGens; i++) {
     word = generate();
   }
 
-  // Render L-System in 3D WEBGL space
   push();
-  translate(0, height / 2, 0); // Anchored exactly at the bottom edge of the canvas
+  translate(0, height / 2, 0);
   scale(3.0);
   
   for(let i = 0; i < word.length; i++) {
@@ -103,7 +95,7 @@ function draw() {
 }
 
 function generateFlowerMesh(params) {
-  flowerPoints = []; // Clear previous flower geometry
+  flowerPoints = [];
 
   let pNum = params.pNum;
   let fD = params.fD;
@@ -133,8 +125,8 @@ function generateFlowerMesh(params) {
         (1 + b * pow(r/100, 2) * sin(bNum * angleDeg)) + (n * 3);
 
       let waveFactor = sin(pNum * angleDeg);
-      let brightVal = map(thetaVal, 0, rows, 15, 90) + (waveFactor * 14);
-      brightVal = constrain(brightVal, 8, 95);
+      let brightVal = map(thetaVal, 0, rows, 55, 98) + (waveFactor * 8);
+      brightVal = constrain(brightVal, 45, 100);
 
       rowArr.push({ x: x, y: y, z: z, brightness: brightVal });
     }
@@ -148,7 +140,6 @@ function drawParticleFlower() {
   rotateX(55);
   translate(0, 0, 210);
 
-  // 1. Solid occluder core to mask stems behind the flower
   noStroke();
   fill(0, 0, 5); 
   let stepTheta = 1;
@@ -165,12 +156,12 @@ function drawParticleFlower() {
     endShape();
   }
 
-  // 2. Surface particle cloud
+  let currentHue = flowerTypes[currentTypeIndex].hue;
   strokeWeight(2.1);
   for (let theta = 0; theta < flowerPoints.length; theta++) {
     for (let phi = 0; phi < flowerPoints[theta].length; phi++) {
       let pt = flowerPoints[theta][phi];
-      stroke(0, 0, pt.brightness);
+      stroke(currentHue, 35, pt.brightness);
       point(pt.x, pt.y, pt.z);
     }
   }
