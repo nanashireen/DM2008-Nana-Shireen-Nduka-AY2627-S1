@@ -24,5 +24,3 @@ _Rename the main folder when you duplicate this for your own projects!_
 ## Your project notes
 
 Document your project here: what it does, what sensor you used, and how the data maps to the visual.
-
----
