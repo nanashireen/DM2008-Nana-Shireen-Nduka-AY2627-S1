@@ -7,9 +7,9 @@ const FULL_PRESSURE = 450;     // a reading this high grows the flower at top sp
 const SENSOR_MAX = 1023;       // top of the meter bar
 const SERIAL_TIMEOUT = 1000;   // ms of silence from the Arduino counts as released
 
-// Sound effect that plays when a flower starts growing
-const GROW_SOUND_FILE = "universfield-magic-spell-02-250240.mp3";   // has to be in the same folder as the sketch
-const GROW_SOUND_VOLUME = 0.7;                                      // 0 is silent, 1 is full volume
+// Sound effect that plays when a flower starts growing (Nana)
+const GROW_SOUND_FILE = "universfield-magic-spell-02-250240.mp3";   
+const GROW_SOUND_VOLUME = 0.7;                                      
 
 // Figuring out the time and size of the flowers, and how many can be on screen at once (Nana)
 const GROWTH_TIME = 1600;      // time to reach full size at normal pressure
@@ -220,6 +220,7 @@ function draw() {
   }
 }
 
+// Easing functions and other math helpers (Nana)
 function easeGrow(t) {
   return 1 - pow(1 - t, 2.2);
 }
@@ -313,7 +314,7 @@ function finishPress() {
   setMeter(0);
 }
 
-// Pressure only changes how fast the flower grows, not what kind it is.
+// Pressure only changes how fast the flower grows, not what kind it is. (Nana)
 function growFlower(flower, reading, elapsed) {
   if (!flower) return;
 
@@ -348,7 +349,7 @@ function readSensorValue(reading) {
   const current = inputSource === "sensor" && activeFlower ? ` | ${activeFlower.type.name}` : "";
   statusEl.elt.textContent = `Sensor reading: ${reading}${current}`;
 }
-
+// Connecting to the sensor (Sahara)
 async function connectSensor() {
   if (!navigator.serial) {
     statusEl.elt.textContent = "Open the sketch in desktop Chrome or Edge over HTTPS or localhost.";
@@ -503,7 +504,7 @@ function drawPlant(flower, health, fade, now) {
   }
 }
 
-// Picks a blossom recipe at random and nudges the numbers a little so it is randomised
+// Picks a blossom recipe at random and nudges the numbers a little so it is randomised (Jocelyn)
 function makeRandomType() {
   const start = random(species);
 
