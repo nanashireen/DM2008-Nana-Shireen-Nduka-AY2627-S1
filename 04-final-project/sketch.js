@@ -241,7 +241,7 @@ function fadeOf(flower, now) {
 // Pressing, growing and releasing (Nana & Sahara)
 
 function pickX() {
-  // Try a few spots and keep the one furthest from existing flowers.
+  // Try a few spots and keep the one furthest from existing flowers
   let best = 0;
   let bestDist = -1;
 
@@ -272,7 +272,7 @@ function playGrowSound() {
 function beginPress(reading, source) {
   const now = millis();
 
-  // Too many flowers: make the oldest released ones start fading early.
+  // Too many flowers: make the oldest released ones start fading early
   const released = flowers
     .filter((flower) => flower !== activeFlower && flower.releasedAt !== null && fadeOf(flower, now) === 0)
     .sort((a, b) => a.releasedAt - b.releasedAt);
@@ -318,7 +318,7 @@ function finishPress() {
 function growFlower(flower, reading, elapsed) {
   if (!flower) return;
 
-  // Stops at maximum size; the flower then stays until the sensor is released.
+  // Stops at maximum size; the flower then stays until the sensor is released
   if (flower.growth >= 1 || elapsed <= 0) return;
 
   const pressure = constrain(
@@ -336,7 +336,7 @@ function readSensorValue(reading) {
   const now = millis();
 
   if (inputSource === "sensor" && reading <= RELEASE_THRESHOLD) {
-    // Reading is 0: this flower is finished, the next press plants a new one.
+    // Reading is 0 so this flower is finished, the next press plants a new one
     finishPress();
   } else if (!activeFlower && reading >= TOUCH_THRESHOLD) {
     beginPress(reading, "sensor");
